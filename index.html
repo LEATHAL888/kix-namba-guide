@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIX → Namba Travel Guide</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+h1 { color: #004aad; }
+select { margin: 10px; padding: 5px; }
+#steps { margin-top: 20px; }
+.step { margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);}
+button { background: #004aad; color: #fff; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+button:hover { background: #0066ff; }
+</style>
+</head>
+<body>
+
+<h1>KIX → Namba Travel Guide</h1>
+
+<label for="routeSelect">Select Route:</label>
+<select id="routeSelect">
+<option value="rapit">Rapi:t Limited Express</option>
+<option value="express">Airport Express</option>
+<option value="bus">Limousine Bus</option>
+</select>
+
+<label for="langSelect">Select Language:</label>
+<select id="langSelect">
+<option value="en">English</option>
+<option value="jp">日本語</option>
+<option value="cn">中文</option>
+<option value="kr">한국어</option>
+</select>
+
+<div id="steps">
+<!-- Steps will be dynamically loaded here -->
+</div>
+
+<button id="exportPdf">Download PDF</button>
+
+<script src="html2pdf.min.js"></script>
+<script src="analytics.js"></script>
+<script>
+// Load language JSON and populate steps
+let langData = {};
+fetch('lang.json')
+.then(response => response.json())
+.then(data => { langData = data; updateSteps(); });
+
+const routeSelect = document.getElementById('routeSelect');
+const langSelect = document.getElementById('langSelect');
+const stepsDiv = document.getElementById('steps');
+
+routeSelect.addEventListener('change', updateSteps);
+langSelect.addEventListener('change', updateSteps);
+
+function updateSteps() {
+const route = routeSelect.value;
+const lang = langSelect.value;
+stepsDiv.innerHTML = '';
+let i = 1;
+while(langData
